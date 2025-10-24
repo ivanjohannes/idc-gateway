@@ -1,0 +1,23 @@
+{
+  "name": "idc-router",
+  "version": "1.0.0",
+  "description": "Routes request to the appropriate idc-core",
+  "homepage": "https://github.com/ivanjohannes/idc-router#readme",
+  "bugs": {
+    "url": "https://github.com/ivanjohannes/idc-router/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivanjohannes/idc-router.git"
+  },
+  "license": "ISC",
+  "author": "Ivan Johannes",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
