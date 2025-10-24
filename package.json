@@ -1,23 +1,28 @@
 {
-  "name": "idc-router",
+  "name": "idc-gateway",
   "version": "1.0.0",
   "description": "Routes request to the appropriate idc-core",
-  "homepage": "https://github.com/ivanjohannes/idc-router#readme",
+  "homepage": "https://github.com/ivanjohannes/idc-gateway#readme",
   "bugs": {
-    "url": "https://github.com/ivanjohannes/idc-router/issues"
+    "url": "https://github.com/ivanjohannes/idc-gateway/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ivanjohannes/idc-router.git"
+    "url": "git+https://github.com/ivanjohannes/idc-gateway.git"
   },
   "license": "ISC",
   "author": "Ivan Johannes",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5",
+    "jose": "^6.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.20.0"
   }
 }
