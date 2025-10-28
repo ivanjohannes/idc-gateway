@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Ensure path exists
-mkdir -p keys
+mkdir -p src/keys
 
 # Generate RSA private key (2048 bits by default)
 echo "Generating RSA key pair..."
