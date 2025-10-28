@@ -4,16 +4,12 @@ import { attachClientSettings, forwardToIdcCore } from "./middleware.js";
 
 const router = express.Router();
 
-// MIDDLEWARE
-router.use(attachClientSettings);
-// END MIDDLEWARE
-
 // ROUTES
 router.get("/jwks.json", jwks_controller);
 router.get("/ping/gateway", ping_controller);
-router.get("/ping", forwardToIdcCore);
-router.post("/task", forwardToIdcCore);
-router.post("/action", forwardToIdcCore);
+router.get("/ping", attachClientSettings, forwardToIdcCore);
+router.post("/task", attachClientSettings, forwardToIdcCore);
+router.post("/action", attachClientSettings, forwardToIdcCore);
 // END ROUTES
 
 export default router;

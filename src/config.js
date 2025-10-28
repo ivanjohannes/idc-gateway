@@ -23,9 +23,9 @@ export default {
   idc_gateway: {
     url: process.env.IDC_GATEWAY_URL,
   },
-  mongodb: {
-    url: process.env.MONGODB_CLIENT_URL,
-    db_name: process.env.MONGODB_DB_NAME,
+  idc_core: {
+    url: process.env.IDC_CORE_URL,
+    client_id: process.env.IDC_CLIENT_ID,
   },
   http: {
     port: process.env.HTTP_PORT,
