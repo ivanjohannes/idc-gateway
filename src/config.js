@@ -6,6 +6,14 @@ dotenv.config({
   quiet: true,
 });
 
+/**
+ * @type {object}
+ * @property {object} jwk - The JSON Web Key
+ * @property {Array} jwks - The JSON Web Key Set
+ * @property {string} key_id - The Key ID
+ * @property {string} public - The public key in PEM format
+ * @property {string} private - The private key in PEM format
+ */
 const jwt_keys = {};
 
 try {
