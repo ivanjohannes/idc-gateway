@@ -7,12 +7,9 @@ const jwks_clients = {};
 
 const proxy = httpProxy.createProxyServer({ ws: true, changeOrigin: true });
 
-export async function attachClientSettings(req, res, next) {
+async function getClientSettings(api_key, token) {
+  let client_settings;
   try {
-    const bearer_token = req.headers["authorization"];
-    const api_key = bearer_token?.split(" ")[1];
-    const token = req.query.token;
-
     if (api_key) {
       // identify the client by the provided api key
       const jwt_token = clientSettingsJwt({
@@ -86,10 +83,8 @@ export async function attachClientSettings(req, res, next) {
         throw "client not recognized";
       }
 
-      const client_settings = client_document.settings || {};
-
-      req.client_settings = {
-        ...client_settings,
+      client_settings = {
+        ...client_document.settings,
         environment_settings: client_document.environment?.settings || {},
       };
     } else if (token) {
@@ -181,17 +176,16 @@ export async function attachClientSettings(req, res, next) {
         });
       });
 
-      const client_settings = client_document.settings || {};
-
-      req.client_settings = {
-        ...client_settings,
+      client_settings = {
+        ...client_document.settings,
         environment_settings: client_document.environment?.settings || {},
       };
     } else {
       throw "no api key or token provided";
     }
+  } catch (err) {
   } finally {
-    next();
+    return client_settings;
   }
 }
 
@@ -205,8 +199,12 @@ function getPublicKey(environment_idc_id) {
   };
 }
 
-export function forwardToIdcCore(req, res, next) {
-  const client_settings = req.client_settings;
+export async function forwardToIdcCore(req, res, next) {
+  const bearer_token = req.headers["authorization"];
+  const api_key = bearer_token?.split(" ")[1];
+  const token = req.query.token;
+  const client_settings = await getClientSettings(api_key, token);
+  req.client_settings = client_settings;
 
   if (!client_settings?.client_id) {
     return res.status(401).json({ error: "Client not recognized" });
@@ -238,9 +236,14 @@ export function forwardToIdcCore(req, res, next) {
   );
 }
 
-export function forwardWSToIdcCore(req, socket, head) {
+export async function forwardWSToIdcCore(req, socket, head) {
   console.log("🔵 - WS upgrade request received");
-  const client_settings = req.client_settings;
+
+  const search_params = new URLSearchParams(req.url.split("?")[1]);
+  const token = search_params.get("token");
+
+  const client_settings = await getClientSettings(null, token);
+  req.client_settings = client_settings;
 
   if (!client_settings?.client_id) {
     socket.destroy();
@@ -253,8 +256,6 @@ export function forwardWSToIdcCore(req, socket, head) {
   }
 
   const jwt_token = clientSettingsJwt(client_settings);
-
-  console.log(jwt_token, client_settings);
 
   proxy.ws(
     req,
