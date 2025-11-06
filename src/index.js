@@ -1,12 +1,12 @@
 import config from "./config.js";
-import http_app from "./http/index.js";
+import http from "./http/index.js";
 
 console.log("🟡 - idc-gateway starting");
 
 // HTTP server
 if (config.http.port) {
   await new Promise((resolve) => {
-    http_app.listen(config.http.port, (err) => {
+    http.listen(config.http.port, (err) => {
       if (err) {
         console.error(`🔴 - HTTP failed to start:`, err);
         process.exit(1);
