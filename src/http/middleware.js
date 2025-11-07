@@ -9,6 +9,7 @@ const proxy = httpProxy.createProxyServer({ ws: true, changeOrigin: true });
 
 async function getClientSettings(api_key, token) {
   let client_settings;
+  let verified_token;
   try {
     if (api_key) {
       // identify the client by the provided api key
@@ -169,7 +170,7 @@ async function getClientSettings(api_key, token) {
         });
       }
 
-      const verified_token = await new Promise((resolve, reject) => {
+      verified_token = await new Promise((resolve, reject) => {
         jwt.verify(token, getPublicKey(environment_idc_id), { algorithms: ["RS256"] }, (err, decoded) => {
           if (err) return reject(err);
           resolve(decoded);
@@ -185,7 +186,10 @@ async function getClientSettings(api_key, token) {
     }
   } catch (err) {
   } finally {
-    return client_settings;
+    return {
+      client_settings,
+      verified_token,
+    };
   }
 }
 
@@ -203,7 +207,7 @@ export async function forwardToIdcCore(req, res, next) {
   const bearer_token = req.headers["authorization"];
   const api_key = bearer_token?.split(" ")[1];
   const token = req.query.token;
-  const client_settings = await getClientSettings(api_key, token);
+  const { client_settings, verified_token } = await getClientSettings(api_key, token);
   req.client_settings = client_settings;
 
   if (!client_settings?.client_id) {
@@ -242,7 +246,7 @@ export async function forwardWSToIdcCore(req, socket, head) {
   const search_params = new URLSearchParams(req.url.split("?")[1]);
   const token = search_params.get("token");
 
-  const client_settings = await getClientSettings(null, token);
+  const { client_settings } = await getClientSettings(null, token);
   req.client_settings = client_settings;
 
   if (!client_settings?.client_id) {
