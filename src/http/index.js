@@ -1,28 +1,30 @@
 import express from "express";
-import { forwardToIdcCore, forwardWSToIdcCore } from "./middleware.js";
+import { forwardWSHandshakeToCore, forwardToCore, forwardWSToCore } from "./middleware.js";
 import { jwks_controller, ping_controller } from "./controllers.js";
 import cors from "cors";
 import { createServer } from "http";
 
 const app = express();
 
-// Middleware
+// Global Middleware
 app.use(cors());
-// END Middleware
+// END Global Middleware
 
-// Routes
+// Gateway Routes
 app.get("/jwks.json", jwks_controller);
 app.get("/ping/gateway", ping_controller);
-// End Routes
+// End Gateway Routes
 
-// More Middleware
-app.use(forwardToIdcCore);
-// END More Middleware
+// Handle Socket.IO initial handshake
+app.use(forwardWSHandshakeToCore)
+
+// Forward everything to Core
+app.use(forwardToCore);
 
 // HTTP Server
 const http = createServer(app);
 
 // Websocket Proxying
-http.on("upgrade", forwardWSToIdcCore);
+http.on("upgrade", forwardWSToCore);
 
 export default http;
