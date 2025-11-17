@@ -22,7 +22,7 @@ async function getClientSettings(api_key, client_id) {
         action_definition: {
           tasks_definitions: {
             generate_hash: {
-              function: "string_to_hash",
+              function: "util_string_to_hash",
               params: {
                 unhashed_string: api_key || "",
               },
@@ -30,7 +30,7 @@ async function getClientSettings(api_key, client_id) {
               is_secret_task_results: true,
             },
             get_client: {
-              function: "aggregation",
+              function: "mongodb_aggregation",
               params: {
                 collection_name: "clients",
                 pipeline: [
@@ -85,7 +85,7 @@ async function getClientSettings(api_key, client_id) {
         action_definition: {
           tasks_definitions: {
             get_client: {
-              function: "aggregation",
+              function: "mongodb_aggregation",
               params: {
                 collection_name: "clients",
                 pipeline: [
