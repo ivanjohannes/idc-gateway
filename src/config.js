@@ -44,7 +44,6 @@ export default {
   },
   idc_gateway_core: {
     url: process.env.IDC_GATEWAY_CORE_URL,
-    client_id: process.env.IDC_CLIENT_ID,
   },
   http: {
     port: process.env.HTTP_PORT,
