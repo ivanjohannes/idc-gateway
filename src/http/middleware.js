@@ -32,7 +32,6 @@ async function getClientSettings(api_key, client_id) {
               params: {
                 unhashed_string: api_key || "",
               },
-              is_secret_task_definition: true,
               is_secret_task_results: true,
             },
             get_client: {
@@ -70,7 +69,6 @@ async function getClientSettings(api_key, client_id) {
                   },
                 ],
               },
-              is_secret_task_definition: true,
             },
           },
         },
@@ -125,7 +123,6 @@ async function getClientSettings(api_key, client_id) {
                   },
                 ],
               },
-              is_secret_task_definition: true,
             },
           },
         },
