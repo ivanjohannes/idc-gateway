@@ -186,9 +186,21 @@ export async function forwardWSHandshakeToCore(req, res, next) {
 }
 
 export async function forwardToCore(req, res, next) {
+  // /**
+  //  * Use this to startup everything (this is the egg...or chicken?)
+  //  */
+  // const client_settings = {
+  //   client_id: config.idc_gateway_core.client_id,
+  //   environment_settings: {
+  //     idc_core_url: config.idc_gateway_core.url,
+  //   },
+  // };
+
+  /**
+   * Use this to fetch client settings based on API key provided in Authorization header
+   */
   const bearer_token = req.headers["authorization"];
   const api_key = bearer_token?.split(" ")[1];
-
   const client_settings = await getClientSettings(api_key);
   
   req.client_settings = client_settings;
